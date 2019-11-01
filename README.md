@@ -12,6 +12,8 @@ With docker installed:
 make serve
 ```
 
+Access the server from `localhost:8080`.
+
 ### Delete and clean up docker
 
 Run: `make down`, which will remove the image and container.
