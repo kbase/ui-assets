@@ -2,6 +2,12 @@
 
 Store and serve static assets for KBase frontends.
 
+## Directory structure and file names
+
+Some conventions:
+
+- Give images the filename format `{name}-width-height.{ext}` where `width` and `height` are in pixels.
+
 ## Development
 
 ### Run the server
