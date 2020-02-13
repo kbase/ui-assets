@@ -261,32 +261,6 @@ function initStaticNarrative(servWizardUrl, dataUrl) {
                 let htmlPath = linkNode.getAttribute('href')
                 linkNode.setAttribute('href', fssUrl + htmlPath)
             })
-            document.querySelectorAll('ul.kb-report-file-list a').forEach((linkNode) => {
-                linkNode.addEventListener('click', (e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    const iframeId = linkNode.dataset.target,
-                        fileName = linkNode.dataset.name,
-                        srcUrl = linkNode.dataset.src,
-                        m = srcUrl.match(/\/node\/(.+)$/)
-                    let reportFileUrl = dataUrl
-                    if (m) {
-                        let query = {
-                            id: m[1],
-                            wszip: 0,
-                            name: fileName
-                        }
-                        let queryString = Object.keys(query).map((key) => {
-                            return [key, query[key]]
-                                .map(encodeURIComponent)
-                                .join('=')
-                        })
-                        .join('&')
-                        reportFileUrl += '/download?' + queryString
-                    }
-                    document.querySelector('iframe#' + iframeId).setAttribute('src', reportFileUrl)
-                })
-            })
         })
 
     /* 2. Initialize the click events attacthed to the main tabs. Calls selectTab on the
