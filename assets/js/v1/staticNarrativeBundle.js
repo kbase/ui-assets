@@ -19,6 +19,10 @@ class DataBrowser {
     render(data) {
         this.container = this.structureRender()
         this.node.appendChild(this.container)
+        if (!data || !data.data || data.data.length === 0) {
+            this.container.innerHTML = 'No data was used in this Narrative.'
+            return
+        }
         data.data.forEach((obj) => {
             let type = obj[2].split('-')[0].split('.')[1]
             new DataCard({
@@ -188,15 +192,24 @@ function toggleAppView(btn) {
     btn.classList.add('selected')
 }
 
-
-function initStaticNarrative(servWizardUrl) {
+/**
+ * Initializes the buttons, tabs, and reports for a static narrative.
+ * @param {string} servWizardUrl - full url for the service wizard
+ */
+function initStaticNarrative(servWizardUrl, dataUrl) {
     let fileSetServUrl = null,
         lastFSSUrlLookup = 0,
         dataBrowser = null
 
+    /**
+     * Fetches the HTMLFileSetServ (HTML File set service) url from the service wizard.
+     * This is used to set up the report iframes and links out to report documents and files.
+     * It'll likely only be used once, but it's cached for 5 minutes just in case.
+     * @param {string} servWizardUrl
+     */
     function getFileServUrl(servWizardUrl) {
         const now = new Date()
-        const fiveMin = 300000  //ms
+        const fiveMin = 300000  // 5 minutes in ms
         if (fileSetServUrl == null || now.getTime() > lastFSSUrlLookup + fiveMin) {
             return fetch(servWizardUrl, {
                 method: 'POST',
@@ -208,8 +221,8 @@ function initStaticNarrative(servWizardUrl) {
                 body: JSON.stringify({
                     method: 'ServiceWizard.get_service_status',
                     params: [{
-                    module_name: 'HTMLFileSetServ',
-                    version: null
+                        module_name: 'HTMLFileSetServ',
+                        version: null
                     }],
                     version: '1.1',
                     id: String(Math.random()).slice(2)
@@ -228,20 +241,57 @@ function initStaticNarrative(servWizardUrl) {
         }
     }
 
-    // Init reports
+    /* Now the meat of the process. Broken down into 4 steps.
+     * 1. Get the HTML File server url, find all divs that carry a file path attribute (data-path),
+     *    and use that to build and append an iframe inside them. This also creates the link to
+     *    the standalone separate pages for the reports.
+     */
     getFileServUrl(servWizardUrl)
         .then((fssUrl) => {
-            document.querySelectorAll('div.kb-app-report').forEach((node) => {
-                const reportUrl = fssUrl + node.dataset.path
+            document.querySelectorAll('div[data-kbreport]').forEach((node) => {
+                const reportUrl = fssUrl + node.dataset.kbreport
                 const iframe = document.createElement('iframe')
                 iframe.setAttribute('id', 'iframe-' + String(Math.random()).slice(2))
                 iframe.classList.add('kb-app-report-iframe')
-                node.appendChild(iframe)
+                node.querySelector('a').setAttribute('href', reportUrl)
+                node.querySelector('div.kb-app-report').appendChild(iframe)
                 iframe.setAttribute('src', reportUrl)
+            })
+            document.querySelectorAll('ul.kb-report-link-list a').forEach((linkNode) => {
+                let htmlPath = linkNode.getAttribute('href')
+                linkNode.setAttribute('href', fssUrl + htmlPath)
+            })
+            document.querySelectorAll('ul.kb-report-file-list a').forEach((linkNode) => {
+                linkNode.addEventListener('click', (e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    const iframeId = linkNode.dataset.target,
+                        fileName = linkNode.dataset.name,
+                        srcUrl = linkNode.dataset.src,
+                        m = srcUrl.match(/\/node\/(.+)$/)
+                    let reportFileUrl = dataUrl
+                    if (m) {
+                        let query = {
+                            id: m[1],
+                            wszip: 0,
+                            name: fileName
+                        }
+                        let queryString = Object.keys(query).map((key) => {
+                            return [key, query[key]]
+                                .map(encodeURIComponent)
+                                .join('=')
+                        })
+                        .join('&')
+                        reportFileUrl += '/download?' + queryString
+                    }
+                    document.querySelector('iframe#' + iframeId).setAttribute('src', reportFileUrl)
+                })
             })
         })
 
-    // init main tab events
+    /* 2. Initialize the click events attacthed to the main tabs. Calls selectTab on the
+     *    clicked tab.
+     */
     document.querySelectorAll('.kbs-tabs a').forEach((node) => {
         node.addEventListener('click', (e) => {
             e.preventDefault()
@@ -249,7 +299,9 @@ function initStaticNarrative(servWizardUrl) {
         })
     })
 
-    // init data browser on click
+    /* 3. Set up the data browser to load itself only after shown. A little lazy-loading here.
+     *    Specifically, it sets up the data browser (once) after the data tab has been clicked.
+     */
     document.querySelector('a[href="#kbs-data"]').addEventListener('click', event => {
         if (!dataBrowser) {
             dataBrowser = new DataBrowser({
@@ -259,7 +311,8 @@ function initStaticNarrative(servWizardUrl) {
         }
     })
 
-    // init app cell tab events
+    /* 4. Set up app cell tab click events - toggle between the "View Configure" and "Result" tabs.
+     */
     document.querySelectorAll('button.app-view-toggle').forEach((node) => {
         node.addEventListener('click', (e) => {
             toggleAppView(node)
