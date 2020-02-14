@@ -2,6 +2,7 @@ class DataBrowser {
     constructor(options) {
         this.dataFile = options.dataFile
         this.node = options.node
+        this.host = options.host || 'https://narrative.kbase.us'
         this.loadData()
     }
 
@@ -47,6 +48,7 @@ class DataCard {
         this.container = options.container
         this.icon = options.icon
         this.type = options.type
+        this.host = options.host
         this.render()
     }
 
@@ -66,7 +68,7 @@ class DataCard {
         let infoNode = document.createElement('div')
         infoNode.classList.add('kb-data-card-info')
         infoNode.innerHTML = `
-            <a style="font-weight: bold; font-size: 11pt; color: #2e618d;" href="https://ci.kbase.us/#dataview/${this.data[0]}">${this.data[1]}</a>
+            <a style="font-weight: bold; font-size: 11pt; color: #2e618d;" href="${this.host}/#dataview/${this.data[0]}">${this.data[1]}</a>
             <div style="padding-left: 10px">
                 <div>${this.type}</div>
                 <div>${readableTimestamp(this.data[3])}</div>
@@ -75,7 +77,6 @@ class DataCard {
         this.node.appendChild(infoNode)
 
         this.container.appendChild(this.node)
-        console.log(this.icon)
     }
 
 }
@@ -196,7 +197,7 @@ function toggleAppView(btn) {
  * Initializes the buttons, tabs, and reports for a static narrative.
  * @param {string} servWizardUrl - full url for the service wizard
  */
-function initStaticNarrative(servWizardUrl, dataUrl) {
+function initStaticNarrative(servWizardUrl, dataUrl, host) {
     let fileSetServUrl = null,
         lastFSSUrlLookup = 0,
         dataBrowser = null
@@ -280,7 +281,8 @@ function initStaticNarrative(servWizardUrl, dataUrl) {
         if (!dataBrowser) {
             dataBrowser = new DataBrowser({
                 node: document.querySelector('div#kbs-data'),
-                dataFile: 'data.json'
+                dataFile: 'data.json',
+                host: host
             })
         }
     })
