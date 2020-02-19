@@ -30,7 +30,8 @@ class DataBrowser {
                 container: this.container,
                 data: obj,
                 icon: data.types[type].icon,
-                type: type
+                type: type,
+                host: this.host
             })
         })
     }
