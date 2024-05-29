@@ -23,7 +23,3 @@ Access the server from `localhost:8080`.
 ### Delete and clean up docker
 
 Run: `make down`, which will remove the image and container.
-
-### Deploy to docker hub
-
-Increment the version for the image name in `scripts/local-build.sh`, then run that script.
