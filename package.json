@@ -1,0 +1,49 @@
+{
+    "name": "ui-assets",
+    "description": "Shared UI assets used by KBase repositories",
+    "version": "0.2.6",
+    "private": true,
+    "repository": "github.com/kbase/ui-assets",
+    "engines": {
+        "node": ">=20"
+    },
+    "dependencies": {
+        "@lodder/grunt-postcss": "^3.1.1",
+        "autoprefixer": "^10.4.19",
+        "bootstrap-sass": "^3.4.3",
+        "cssnano": "^7.0.1",
+        "grunt": "^1.6.1",
+        "grunt-cli": "^1.4.3",
+        "grunt-contrib-watch": "^1.1.0",
+        "grunt-shell": "^4.0.0",
+        "husky": "^9.0.11",
+        "lint-staged": "^15.2.5",
+        "load-grunt-tasks": "^5.1.0",
+        "postcss": "^8.4.38",
+        "stylelint": "^15.10.2",
+        "stylelint-color-format": "^1.1.0",
+        "stylelint-config-recommended": "^13.0.0",
+        "stylelint-config-sass-guidelines": "^10.0.0",
+        "stylelint-config-standard": "^34.0.0"
+    },
+    "browserslist": [
+        "defaults"
+    ],
+    "scripts": {
+        "compile_css_no_postcss": "sass scss/:assets/css/",
+        "compile_css": "sass scss/:assets/css/ && grunt postcss:concat",
+        "compile_css_files": "sass scss/:assets/css/ && grunt postcss:concat && git add assets/css/all_concat.* && echo integrating scss changes from ",
+        "husky_msg": "echo Running git hooks -- see the 'lint-staged' section of package.json for details",
+        "sassv": "sass --version",
+        "server_up": "docker build . -t kbase-ui-assets && docker run -it -v assets:/www/data/ -p 127.0.0.1:8080:80 kbase-ui-assets",
+        "server_down": "docker rmi -f kbase-ui-assets && docker container prune",
+        "stylelint": "stylelint --config .stylelintrc.yaml --fix kbase-extension/scss/**/*.scss",
+        "update_browserslist": "npx update-browserslist-db@latest",
+        "watch_css": "grunt watch"
+    },
+    "lint-staged": {
+        "*.{scss,css,css.map}": [
+            "npm run compile_css_files"
+        ]
+    }
+}
