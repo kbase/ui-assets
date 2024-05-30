@@ -1,0 +1,94 @@
+// .kb-appInput
+.kb-appInput {
+    // .kb-appInput__checkbox
+    &__checkbox {
+        //.kb-appInput__checkbox_container
+        &_container {
+            display: flex;
+        };
+
+        //.kb-appInput__checkbox_error
+        &_error {
+            margin-left: 1rem;
+            display: flex;
+            width: 100%;
+
+            &_container {
+                border: 1px solid use-color('error-light');
+                padding: 0.5em;
+                background-color: use-color('error-lightest');
+                color: use-color('ink');
+
+                &__title {
+                    color: use-color('error');
+                    margin-right: 0.5rem;
+                }
+
+            }
+
+            //.kb-appInput__checkbox_error__close_button
+            &__close_button {
+                margin-left: auto;
+                border: 0;
+                background: none;
+
+                &:hover {
+                    background: none;
+                }
+            }
+        }
+    }
+
+    // .kb-appInput__dynDropdown
+    &__dynDropdown {
+        // .kb-appInput__dynDropdown_display
+        &_display {
+            display: block;
+
+            &__filepath {
+                word-wrap: break-word;
+            }
+
+            &__indent {
+                margin-left: 0.1rem;
+            }
+        }
+    }
+
+    // .kb-appInput__sequence
+    &__sequence {
+        // .kb-appInput__sequence__button_container
+        &__button_container {
+            padding: 0;
+            height: 100%;
+        }
+
+        // .kb-appInput__sequence__row
+        &__row {
+            width: 100%;
+            padding: 2px;
+        }
+
+        // .kb-appInput__sequence__empty
+        &__empty {
+            font-style: italic;
+            color: use-color('grey');
+        }
+    }
+
+    // .kb-appInput__struct
+    &__struct {
+        // .kb-appInput__struct__field
+        &__field {
+            border: 0;
+            padding: 0;
+        }
+
+        // .kb-appInput__struct__subcontrols
+        &__subcontrols {
+            border-left: 5px solid use-color('silver');
+            padding: 2px;
+            margin: 6px
+        }
+    }
+}
