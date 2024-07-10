@@ -203,62 +203,6 @@ table {
   white-space: nowrap;
 }
 
-/* custom checkboxes (prototyped) */
-
-.ncheck {
-  border: 1px solid use-color('base-lighter');
-  height: 15px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 15px;
-
-  &:hover {
-    border: 1px solid rgb(68 68 68);
-  }
-}
-
-.ncheck-btn {
-  border: 1px solid rgb(136 136 136);
-  height: 15px;
-  margin: 4px 0 4px -1px;
-  width: 15px;
-
-  &:hover {
-    border: 1px solid rgb(68 68 68);
-  }
-}
-
-.ncheck-checked {
-  background: url(../img/checkmark.png) no-repeat -5px -4px;
-  background-image: image-set(url(../img/checkmark.png) 1x, url(../img/checkmark_2x.png) 2x);
-}
-
-.ncheck-minus {
-  background: url(../img/checkmark-partial.png) no-repeat -5px -5px;
-  background-image: image-set(url(../img/checkmark-partial.png) 1x, url(../img/checkmark-partial_2x.png) 2x);
-}
-
-.btn-select-all {
-  height: 34px;
-  margin: 0 20px 0 0;
-}
-
-.type-filter {
-  margin: 0 20px 0 0;
-}
-
-.btn-trash {
-  margin: 3px 20px 0 0;
-}
-
-.btn-show-info .glyphicon {
-  padding: 0 0 4px;
-}
-
-.open-obj {
-  margin: 7px 0 0 20px;
-}
-
 /******************     narrative     ***************/
 
 #login-form {

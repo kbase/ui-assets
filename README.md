@@ -2,11 +2,26 @@
 
 Store and serve static assets for KBase frontends.
 
+- [KBase static assets for UI](#kbase-static-assets-for-ui)
+  - [Directory structure and file names](#directory-structure-and-file-names)
+  - [Development](#development)
+    - [Run the server](#run-the-server)
+    - [Delete and clean up docker](#delete-and-clean-up-docker)
+  - [Jupyter Notebook Styling](#jupyter-notebook-styling)
+  - [CSS Compilation](#css-compilation)
+    - [Updating your npm packages](#updating-your-npm-packages)
+    - [Building style files](#building-style-files)
+    - [Style file styling](#style-file-styling)
+    - [Autoprefixer](#autoprefixer)
+    - [Stylelint](#stylelint)
+
+
 ## Directory structure and file names
 
 Some conventions:
 
 - Give images the filename format `{name}-width-height.{ext}` where `width` and `height` are in pixels.
+
 
 ## Development
 
@@ -29,6 +44,16 @@ npm run server_down
 ```
 
 which will remove the image and container.
+
+
+## Jupyter Notebook Styling
+
+The KBase Narrative is based on [Jupyter Notebook](https://jupyter-notebook.readthedocs.io/en/stable/) v6.x (now known as the ["classic" notebook](https://github.com/jupyter/nbclassic)), which comes with some basic styling that the KBase narrative inherits and builds from. That style file and its dependencies are maintained within this repo to ensure that anyone using the KBase narrative styling can also access the styles upon which it is based.
+
+Whenever the notebook is updated in the narrative repo, the accompanying style file should be updated in this repo. The easiest way to get the updated style file is to run the narrative locally using `kbase-narrative` and grab it from `http://localhost:8888/static/style/style.min.css`. The new `style.min.css` file should be added under [`assets/css`](assets/css).
+
+The Jupyter notebook css [relies upon fonts](https://github.com/jupyter/nbclassic/blob/main/bower.json) from the `bootstrap` and `font-awesome` npm packages, which are specified in the `package.json` file in this repo. The font files from those packages are copied to [`assets/components/`](assets/components/) to mimic the structure that the notebook css file expects. The node task `copy_fonts` (`npm run copy_fonts`) can be used to update the font files in the unlikely event that these versions of the fonts change.
+
 
 ## CSS Compilation
 
