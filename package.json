@@ -10,8 +10,10 @@
     "dependencies": {
         "@lodder/grunt-postcss": "^3.1.1",
         "autoprefixer": "^10.4.19",
+        "bootstrap": "3.4",
         "bootstrap-sass": "^3.4.3",
         "cssnano": "^7.0.1",
+        "font-awesome": "^4.7.0",
         "grunt": "^1.6.1",
         "grunt-cli": "^1.4.3",
         "grunt-contrib-watch": "^1.1.0",
@@ -30,6 +32,7 @@
         "defaults"
     ],
     "scripts": {
+        "copy_fonts": "cp -r node_modules/bootstrap/fonts/ assets/components/bootstrap/fonts && cp -r node_modules/font-awesome/fonts/ assets/components/font-awesome/fonts",
         "compile_css_no_postcss": "sass scss/:assets/css/",
         "compile_css": "sass scss/:assets/css/ && grunt postcss:concat",
         "compile_css_files": "sass scss/:assets/css/ && grunt postcss:concat && git add assets/css/all_concat.* && echo integrating scss changes from ",
